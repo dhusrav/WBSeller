@@ -60,4 +60,38 @@ class Supplies extends AbstractEndpoint
     {
         return $this->getRequest('/api/v1/warehouses');
     }
+
+    /**
+     * Список поставок
+     *
+     * Возвращает список поставок Wildberries.
+     * Максимум 30 запросов в минуту, интервал 2 секунды
+     * @link https://dev.wildberries.ru/openapi/orders-fbw#tag/Informaciya-o-postavkah/paths/~1api~1v1~1supplies/post
+     */
+    public function getSupplies(array $dates = [], ?int $limit = 1000, ?int $offset = 0, ?array $statusIDs = [1,2,3,4,5,6])
+    {
+
+        $maxLimit = 1_000;
+        if ($limit > $maxLimit) {
+            throw new InvalidArgumentException("Превышение максимального количества запрашиваемых товаров: {$maxLimit}");
+        }
+
+        return $this->postRequest('/api/v1/supplies?' . http_build_query([
+                'limit' => $limit,
+                'offset' => 0,
+            ]),
+            ['dates' => $dates, 'statusIDs' => $statusIDs]);
+    }
+
+    /**
+     * Детали поставки
+     *
+     * Возвращает детальную информацию о поставке Wildberries.
+     * Максимум 30 запросов в минуту, интервал 2 секунды
+     * @link https://dev.wildberries.ru/openapi/orders-fbw#tag/Informaciya-o-postavkah/paths/~1api~1v1~1supplies~1%7BID%7D/get
+     */
+    public function getSupplyDetail(int $supplyId)
+    {
+        return $this->getRequest('/api/v1/supplies/' . $supplyId);
+    }
 }
