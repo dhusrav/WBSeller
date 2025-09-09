@@ -20,7 +20,7 @@ class Tariffs extends AbstractEndpoint
      *
      * @return object Список комиссий
      */
-    public function commission(): object
+    public function commission()
     {
         return $this->getRequest('/api/v1/tariffs/commission', [
             'locale' => $this->locale()
