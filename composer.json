@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Dhusrav\\WBSeller\\": "src/"
+            "Dakword\\WBSeller\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Dhusrav\\WBSeller\\Tests\\": "tests/"
+            "Dakword\\WBSeller\\Tests\\": "tests/"
         }
     }
 }
