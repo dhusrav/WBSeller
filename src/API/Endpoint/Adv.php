@@ -239,7 +239,7 @@ class Adv extends AbstractEndpoint
      *
      * @return array
      */
-    public function statistic(array $params): array
+    public function statistic(array $params)
     {
         return $this->postRequest('/adv/v2/fullstats', $params);
     }
