@@ -40,7 +40,7 @@ class Statistics extends AbstractEndpoint
      *
      * @return array [ {object}, ... ]
      */
-    public function stocks(DateTime $dateFrom): array
+    public function stocks(DateTime $dateFrom)
     {
         return $this->getRequest('/api/v1/supplier/stocks', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
