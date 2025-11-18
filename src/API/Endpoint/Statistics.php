@@ -21,7 +21,7 @@ class Statistics extends AbstractEndpoint
      *
      * @return array [ {object}, ... ]
      */
-    public function incomes(DateTime $dateFrom): array
+    public function incomes(DateTime $dateFrom)
     {
         return $this->getRequest('/api/v1/supplier/incomes', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
@@ -59,7 +59,7 @@ class Statistics extends AbstractEndpoint
      *
      * @return array [ {object}, ... ]
      */
-    public function ordersFromDate(DateTime $dateFrom): array
+    public function ordersFromDate(DateTime $dateFrom)
     {
         return $this->getRequest('/api/v1/supplier/orders', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
@@ -76,7 +76,7 @@ class Statistics extends AbstractEndpoint
      *
      * @return array [ {object}, ... ]
      */
-    public function ordersOnDate(DateTime $dateFrom): array
+    public function ordersOnDate(DateTime $dateFrom)
     {
         return $this->getRequest('/api/v1/supplier/orders', [
             'dateFrom' => $dateFrom->format('Y-m-d'),
@@ -96,7 +96,7 @@ class Statistics extends AbstractEndpoint
      *
      * @return array [ {object}, ... ]
      */
-    public function salesFromDate(DateTime $dateFrom): array
+    public function salesFromDate(DateTime $dateFrom)
     {
         return $this->getRequest('/api/v1/supplier/sales', [
             'dateFrom' => $dateFrom->format(DATE_RFC3339),
@@ -116,7 +116,7 @@ class Statistics extends AbstractEndpoint
      *
      * @return array [ {object}, ... ]
      */
-    public function salesOnDate(DateTime $dateFrom): array
+    public function salesOnDate(DateTime $dateFrom)
     {
         return $this->getRequest('/api/v1/supplier/sales', [
             'dateFrom' => $dateFrom->format('Y-m-d'),
