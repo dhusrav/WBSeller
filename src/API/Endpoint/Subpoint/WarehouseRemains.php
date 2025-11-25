@@ -88,9 +88,8 @@ class WarehouseRemains
      *
      * @param string $task_id ID задания на генерацию
      *
-     * @return array
      */
-    public function getReport(string $task_id): array
+    public function getReport(string $task_id)
     {
         return $this->Analytics
             ->getRequest('/api/v1/warehouse_remains/tasks/' . $task_id . '/download');
