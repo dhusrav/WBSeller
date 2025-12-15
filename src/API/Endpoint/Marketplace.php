@@ -138,7 +138,7 @@ class Marketplace extends AbstractEndpoint
      */
     public function getSupplyOrdersIds(string $supplyId)
     {
-        return $this->getRequest('/api/v3/supplies/' . $supplyId . '/order-ids');
+        return $this->getRequest('/api/marketplace/v3/supplies/' . $supplyId . '/order-ids');
     }
 
     /**
