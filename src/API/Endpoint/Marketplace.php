@@ -130,6 +130,18 @@ class Marketplace extends AbstractEndpoint
     }
 
     /**
+     * Список заказов, закреплённых за поставкой
+     *
+     * @param string $supplyId Идентификатор поставки
+     *
+     * @return object {orders: [orderIds]}
+     */
+    public function getSupplyOrdersIds(string $supplyId)
+    {
+        return $this->getRequest('/api/v3/supplies/' . $supplyId . '/order-ids');
+    }
+
+    /**
      * Добавить к поставке сборочное задание
      *
      * Добавляет к поставке заказы и переводит их в статус confirm ("В сборке")
