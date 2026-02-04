@@ -94,4 +94,16 @@ class Supplies extends AbstractEndpoint
     {
         return $this->getRequest('/api/v1/supplies/' . $supplyId);
     }
+
+    /**
+     * Товары поставки
+     *
+     * Возвращает список товаров поставки Wildberries.
+     * Максимум 30 запросов в минуту, интервал 2 секунды
+     * @link https://dev.wildberries.ru/docs/openapi/orders-fbw#tag/Informaciya-o-postavkah/paths/~1api~1v1~1supplies~1%7BID%7D~1goods/get
+     */
+    public function getSupplyGoods(int $supplyId)
+    {
+        return $this->getRequest('/api/v1/supplies/' . $supplyId . '/goods');
+    }
 }
