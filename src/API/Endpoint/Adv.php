@@ -152,8 +152,12 @@ class Adv extends AbstractEndpoint
         if (count($ids) > $maxCount) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых кампаний: {$maxCount}");
         }
-        return $this->postRequest('/adv/v1/promotion/adverts', $ids) ?? [];
+        $idsString = implode(',', array_map('strval', $ids));
+        $result = $this->getRequest('/api/advert/v2/adverts', ['ids' => $idsString]);
+
+        return (is_object($result) && isset($result->adverts)) ? $result->adverts : ((is_array($result) && isset($result['adverts'])) ? $result['adverts'] : []);
     }
+    
 
     /**
      * Изменение ставки у кампании
