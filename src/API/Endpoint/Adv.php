@@ -227,25 +227,55 @@ class Adv extends AbstractEndpoint
         return $this->responseCode() == 200;
     }
 
+    
     /**
      * Статистика кампаний
      *
      * Максимум 1 запрос в минуту.
      * Данные вернутся для кампаний в статусе 7, 9 и 11.
-     * Важно. В запросе можно передавать либо параметр dates либо параметр interval, но не оба.
-     * Можно отправить запрос только с ID кампании.
-     * При этом вернутся данные за последние сутки, но не за весь период существования кампании.
-     * @link https://openapi.wb.ru/promotion/api/ru/#tag/Statistika/paths/~1adv~1v2~1fullstats/post
+     * Метод формирует статистику для кампаний независимо от типа.
+     * Максимальный период в запросе — 31 день.
+     * Для кампаний в статусах 7, 9 и 11.
+     * Лимит: 3 запроса в минуту.
+     * @link https://dev.wildberries.ru/docs/openapi/promotion#tag/Statistika/paths/~1adv~1v3~1fullstats/get
      *
-     * @param array $params Запрос с датами
-     *                      Запрос с интервалами
-     *                      Запрос только с id кампаний
+     * @param array $ids ID кампаний массив, максимум 50 значений
+     * @param string $beginDate Дата начала интервала (Y-m-d)
+     * @param string $endDate Дата окончания интервала (Y-m-d)
      *
      * @return array
      */
-    public function statistic(array $params)
+    public function statistic(array $ids, string $beginDate, string $endDate)
     {
-        return $this->postRequest('/adv/v2/fullstats', $params);
+
+        if (empty($ids) || !is_array($ids)) {
+            throw new InvalidArgumentException('ids must be a non-empty array.');
+        }
+        if (count($ids) > 50) {
+            throw new InvalidArgumentException('The number of ids must not exceed 50.');
+        }
+        foreach ($ids as $id) {
+            if (!is_int($id) || $id <= 0) {
+                throw new InvalidArgumentException('Each id must be a positive integer.');
+            }
+        }
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $beginDate)) {
+            throw new InvalidArgumentException('beginDate must be in Y-m-d format.');
+        }
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
+            throw new InvalidArgumentException('endDate must be in Y-m-d format.');
+        }
+        if (strtotime($beginDate) === false || strtotime($endDate) === false) {
+            throw new InvalidArgumentException('Invalid date provided.');
+        }
+
+        $query = [
+            'ids' => implode(',', $ids),
+            'beginDate' => $beginDate,
+            'endDate' => $endDate,
+        ];
+
+        return $this->getRequest('/adv/v3/fullstats', $query);
     }
 
     /**
