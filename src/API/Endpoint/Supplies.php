@@ -12,6 +12,7 @@ use InvalidArgumentException;
 class Supplies extends AbstractEndpoint
 {
     /**
+     * deprecated
      * Коэффициенты приёмки
      *
      * Возвращает коэффициенты приёмки для конкретных складов на ближайшие 14 дней.
@@ -19,6 +20,7 @@ class Supplies extends AbstractEndpoint
      * @link https://openapi.wb.ru/supplies/api/ru/#tag/Informaciya-dlya-formirovaniya-postavok/paths/~1api~1v1~1acceptance~1coefficients/get
      *
      * @param array $warehouses ID складов. Если параметр не указан, возвращаются данные по всем складам
+     * 
      */
     public function coefficients(array $warehouses = [])
     {

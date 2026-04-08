@@ -96,4 +96,20 @@ class Tariffs extends AbstractEndpoint
         ->response->data;
     }
 
+    /**
+     * Коэффициенты приёмки
+     *
+     * Возвращает коэффициенты приёмки для конкретных складов на ближайшие 14 дней.
+     * Приёмка для поставки доступна только при сочетании: coefficient = 0/1 и allowUnload = true
+     * @link https://dev.wildberries.ru/docs/openapi/wb-tariffs#tag/Tarify-na-postavku
+     *
+     * @param array $warehouses ID складов. Если параметр не указан, возвращаются данные по всем складам
+     */
+    public function acceptanceCoefficients(array $warehouses = [])
+    {
+        return $this->getRequest('/api/tariffs/v1/acceptance/coefficients', $warehouses ? [
+            'warehouseIDs' => implode(',', $warehouses),
+        ] : []);
+    }
+
 }
