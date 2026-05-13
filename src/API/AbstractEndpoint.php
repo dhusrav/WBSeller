@@ -138,14 +138,24 @@ abstract class AbstractEndpoint
 
         beginRequest:
         $result = $this->Client->request($method, $path, $data, $addonHeaders);
+        $responseHeaders = $this->responseHeaders();
+        $responseCode = $this->responseCode();
+        $responsePhrase = $this->responsePhrase();
 
         if (
-            $this->responseCode() == 400 && property_exists($result, 'errorText')
+            $responseCode == 400 && property_exists($result, 'errorText')
             && mb_strpos(mb_strtolower($result->errorText), 'временные ограничения') !== false
         ) {
-            throw new ApiTimeRestrictionsException($result->errorText);
+            throw new ApiTimeRestrictionsException(
+                $result->errorText,
+                400,
+                null,
+                $responseHeaders,
+                $responseCode,
+                $responsePhrase
+            );
 
-        } elseif ($this->responseCode() == 401) {
+        } elseif ($responseCode == 401) {
             /*
              * "401 Unauthorized"
              *
@@ -157,13 +167,34 @@ abstract class AbstractEndpoint
              * request rejected, unathorized
              */
             if (is_string($result)) {
-                throw new ApiClientException($result, 401);
+                throw new ApiClientException(
+                    $result,
+                    401,
+                    null,
+                    $responseHeaders,
+                    $responseCode,
+                    $responsePhrase
+                );
             } elseif (is_object($result) && property_exists($result, 'errors') && count($result->errors)) {
-                throw new ApiClientException($result->errors[0], 401);
+                throw new ApiClientException(
+                    $result->errors[0],
+                    401,
+                    null,
+                    $responseHeaders,
+                    $responseCode,
+                    $responsePhrase
+                );
             } else {
-                throw new ApiClientException('Unauthorized', 401);
+                throw new ApiClientException(
+                    'Unauthorized',
+                    401,
+                    null,
+                    $responseHeaders,
+                    $responseCode,
+                    $responsePhrase
+                );
             }
-        } elseif ($this->responseCode() == 429) {
+        } elseif ($responseCode == 429) {
             /*
              * "429 Too Many Requests"
              *
@@ -179,27 +210,67 @@ abstract class AbstractEndpoint
                 $message = 'Too many requests';
             }
             if(mb_strpos(mb_strtolower($message), 'технический перерыв') !== false) {
-                throw new ApiTimeRestrictionsException($result->errors[0]);
+                $text = property_exists($result, 'errors') && count($result->errors) ? $result->errors[0] : $message;
+                throw new ApiTimeRestrictionsException(
+                    $text,
+                    429,
+                    null,
+                    $responseHeaders,
+                    $responseCode,
+                    $responsePhrase
+                );
             }
             if ($attempt >= $this->attempts) {
-                throw new ApiClientException($message, 429);
+                throw new ApiClientException(
+                    $message,
+                    429,
+                    null,
+                    $responseHeaders,
+                    $responseCode,
+                    $responsePhrase
+                );
             }
             usleep($this->retryDelay * 1_000);
             $attempt++;
 
             goto beginRequest;
-        } elseif ($this->responseCode() == 504) {
+        } elseif ($responseCode == 504) {
             /*
              * "504 Gateway Time-out"
              */
             if ($attempt >= $this->attempts) {
-                throw new ApiClientException('Gateway Time-out', 504);
+                throw new ApiClientException(
+                    'Gateway Time-out',
+                    504,
+                    null,
+                    $responseHeaders,
+                    $responseCode,
+                    $responsePhrase
+                );
             }
             usleep($this->retryDelay * 1_000);
             $attempt++;
 
             goto beginRequest;
         }
+
+        if (is_object($result)) {
+            $result->responseHeaders = $responseHeaders;
+            return $result;
+        }
+
+        if (is_array($result)) {
+            $result['responseHeaders'] = $responseHeaders;
+            return $result;
+        }
+
+        if (is_string($result)) {
+            return [
+                'response' => $result,
+                'responseHeaders' => $responseHeaders,
+            ];
+        }
+
         return $result;
     }
 
