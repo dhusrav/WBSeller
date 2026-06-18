@@ -31,15 +31,30 @@ class WBSellerException extends \Exception
 
     public function getRatelimitRetry(): ?string
     {
-        return current($this->responseHeaders['X-Ratelimit-Retry'] ?? null);
+        return $this->getRatelimitHeader('X-Ratelimit-Retry');
     }
+
     public function getRatelimitLimit(): ?string
     {
-        return current($this->responseHeaders['X-Ratelimit-Limit'] ?? null);
+        return $this->getRatelimitHeader('X-Ratelimit-Limit');
     }
+
     public function getRatelimitReset(): ?string
     {
-        return current($this->responseHeaders['X-Ratelimit-Reset'] ?? null);
+        return $this->getRatelimitHeader('X-Ratelimit-Reset');
+    }
+
+    private function getRatelimitHeader(string $header): ?string
+    {
+        $values = $this->responseHeaders[$header] ?? null;
+
+        if (! is_array($values) || $values === []) {
+            return null;
+        }
+
+        $value = current($values);
+
+        return $value === false ? null : (string) $value;
     }
 
     public function getResponseCode(): ?int
