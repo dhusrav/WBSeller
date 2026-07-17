@@ -542,4 +542,78 @@ class Analytics extends AbstractEndpoint
         return $result->report ?? [];
     }
 
+    /*
+     * ИСТОРИЯ ОСТАТКОВ
+     * --------------------------------------------------------------------------
+     * @link https://dev.wildberries.ru/docs/openapi/analytics#tag/Istoriya-ostatkov
+     */
+
+    /**
+     * Данные по складам
+     *
+     * Метод формирует набор данных об остатках по складам.
+     * Данные по складам продавца приходят в агрегированном виде — по всем сразу,
+     * без детализации по конкретным складам — эти записи будут с `"regionName":"Маркетплейс"` и `"offices":[]`.
+     * Данные отчёта обновляются раз в час.
+     * Лимит запросов на один аккаунт продавца: 3 запроса в минуту (интервал 20 с).
+     * @link https://dev.wildberries.ru/docs/openapi/analytics#tag/Istoriya-ostatkov/paths/~1api~1v2~1stocks-report~1offices/post
+     *
+     * @param DateTime $dateFrom       Начало периода
+     * @param DateTime $dateTo         Конец периода
+     * @param array    $filter         Фильтр по параметрам [
+     *                                     'nmIDs' => [int, int, ...],       // артикулы WB
+     *                                     'subjectIDs' => [int, int, ...],  // ID предметов
+     *                                     'brandNames' => [string, ...],    // бренды
+     *                                     'tagIDs' => [int, int, ...],      // ID ярлыков
+     *                                 ]
+     * @param string   $stockType      Тип склада хранения товаров: '' — все,
+     *                                                              wb — склады WB,
+     *                                                              mp — склады продавца
+     * @param bool     $skipDeletedNm  Скрыть удалённые товары
+     *
+     * @return object {
+     *      data: {
+     *          regions: [{
+     *              regionName: string,
+     *              metrics: {
+     *                  stockCount: int, stockSum: int,
+     *                  saleRate: {days: int, hours: int},
+     *                  toClientCount: int, fromClientCount: int
+     *              },
+     *              offices: [{
+     *                  officeID: int, officeName: string,
+     *                  metrics: object
+     *              }, ...]
+     *          }, ...],
+     *          currency: string
+     *      }
+     * }
+     *
+     * @throws InvalidArgumentException Неизвестный тип склада
+     */
+    public function stocksReportOffices(
+        DateTime $dateFrom,
+        DateTime $dateTo,
+        array $filter = [],
+        string $stockType = '',
+        bool $skipDeletedNm = false
+    ): object {
+        if (!in_array($stockType, ['', 'wb', 'mp'], true)) {
+            throw new InvalidArgumentException('Неизвестный тип склада: ' . $stockType);
+        }
+
+        return $this->postRequest('/api/v2/stocks-report/offices', [
+            'nmIDs' => $this->getFromFilter('nmIDs', $filter),
+            'subjectIDs' => $this->getFromFilter('subjectIDs', $filter),
+            'brandNames' => $this->getFromFilter('brandNames', $filter),
+            'tagIDs' => $this->getFromFilter('tagIDs', $filter),
+            'currentPeriod' => [
+                'start' => $dateFrom->format('Y-m-d'),
+                'end' => $dateTo->format('Y-m-d'),
+            ],
+            'stockType' => $stockType,
+            'skipDeletedNm' => $skipDeletedNm,
+        ]);
+    }
+
 }

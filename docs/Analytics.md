@@ -31,6 +31,8 @@ Wildberries API / [**Аналитика**](https://openapi.wb.ru/analytics/api/r
 | Получить отчет | /api/v1/analytics/goods-return | Analytics()->**goodsReturn()** |
 | **Динамика оборачиваемости** |||
 | Ежедневная динамика | /api/v1/turnover-dynamics/daily-dynamics | Analytics()->**dailyDynamics()** |
+| [**История остатков**](https://dev.wildberries.ru/docs/openapi/analytics#tag/Istoriya-ostatkov) |||
+| Данные по складам | /api/v2/stocks-report/offices | Analytics()->**stocksReportOffices()** |
 <br>
 
 ## [WBSeller API](/docs/API.md) / Analytics()->PaidStorage()

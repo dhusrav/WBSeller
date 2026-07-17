@@ -101,4 +101,15 @@ class AnalyticsTest extends TestCase
             $this->assertObjectHasAttribute('dt', $first);
         }
     }
+
+    public function test_stocksReportOffices()
+    {
+        $result = $this->Analytics->stocksReportOffices(
+            new \DateTime('2024-11-01'),
+            new \DateTime('2024-11-30')
+        );
+
+        $this->assertObjectHasAttribute('data', $result);
+        $this->assertIsArray($result->data->regions);
+    }
 }
