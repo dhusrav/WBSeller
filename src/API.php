@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dakword\WBSeller;
 
 use Dakword\WBSeller\API\Endpoint\{
-    Adv, Analytics, Calendar, Chat, Common, Content, Documents, Feedbacks, Marketplace, Prices,
+    Adv, Analytics, Calendar, Chat, Common, Content, Documents, Feedbacks, Finance, Marketplace, Prices,
     Questions, Recommends, Returns, Statistics, Supplies, Tariffs
 };
 
@@ -20,6 +20,7 @@ class API
         'content'     => 'https://content-api.wildberries.ru',
         'documents'   => 'https://documents-api.wildberries.ru',
         'feedbacks'   => 'https://feedbacks-api.wildberries.ru',
+        'finance'     => 'https://finance-api.wildberries.ru',
         'marketplace' => 'https://marketplace-api.wildberries.ru',
         'prices'      => 'https://discounts-prices-api.wildberries.ru',
         'questions'   => 'https://feedbacks-api.wildberries.ru',
@@ -41,6 +42,7 @@ class API
      *     'analytics' => '',
      *     'content' => 'Content_key',
      *     'feedbacks' => 'FB_key',
+     *     'finance' => '',
      *     'marketplace' => 'Marketplace_key',
      *     'prices' => '',
      *     'questions' => 'FB_key',
@@ -54,6 +56,7 @@ class API
      *     'analytics' => '',
      *     'content' => 'url',
      *     'feedbacks' => 'url',
+     *     'finance' => '',
      *     'marketplace' => '',
      *     'prices' => '',
      *     'questions' => '',
@@ -160,6 +163,11 @@ class API
     public function Feedbacks(): Feedbacks
     {
         return new Feedbacks($this->apiUrls['feedbacks'], $this->getKey('feedbacks'), $this->proxy, $this->locale);
+    }
+
+    public function Finance(): Finance
+    {
+        return new Finance($this->apiUrls['finance'], $this->getKey('finance'), $this->proxy, $this->locale);
     }
 
     public function Marketplace(): Marketplace

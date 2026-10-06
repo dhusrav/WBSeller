@@ -32,5 +32,6 @@ $wbSellerAPI = new \Dakword\WBSeller\API($options = [
 | Чат<br>с покупателями    | $wbSellerAPI->[**Chat()**](Chat.md)               | chat            | https://buyer-chat-api.wildberries.ru
 | Возвраты<br>покупателями | $wbSellerAPI->[**Returns()**](Returns.md)         | returns         | https://returns-api.wildberries.ru
 | Документы                | $wbSellerAPI->[**Documents()**](Documents.md)     | documents       | https://documents-api.wildberries.ru
+| Финансы                  | $wbSellerAPI->[**Finance()**](Finance.md)         | finance         | https://finance-api.wildberries.ru
 | Календарь акций          | $wbSellerAPI->[**Calendar()**](Calendar.md)       | prices/calendar | https://dp-calendar-api.wildberries.ru
 | Поставки                 | $wbSellerAPI->[**Supplies()**](Supplies.md)       | supplies        | https://supplies-api.wildberries.ru

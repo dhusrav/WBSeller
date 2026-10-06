@@ -1,3 +1,14 @@
+### 4.32.0 - 06/10/2026
+* Новое API `Finance()` — Финансы (`finance-api.wildberries.ru`)
+* Новый метод `Finance::balance()` — Баланс продавца
+* Новый метод `Finance::salesReportsList()` — Список отчётов реализации
+* Новый метод `Finance::salesReportsDetailedById()` — Детализации к отчётам реализации по ID
+* Новый метод `Finance::salesReportsDetailed()` — Детализации к отчётам реализации за период
+* Новый метод `Finance::acquiringList()` — Список отчётов об издержках на приём платежей
+* Новый метод `Finance::acquiringDetailedById()` — Детализации к отчётам эквайринга по ID
+* Новый метод `Finance::acquiringDetailed()` — Детализации к отчётам эквайринга за период
+* В `APIToken` добавлена категория доступа «Финансы» (бит 13)
+
 ### 4.31.3 - 05/03/2025
 * #13
 

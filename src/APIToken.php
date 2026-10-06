@@ -22,6 +22,7 @@ class APIToken
         10 => 'Поставки',
         11 => 'Возвраты покупателями',
         12 => 'Документы',
+        13 => 'Финансы',
     ];
     const BIT_READONLY = 30;
 
@@ -42,6 +43,7 @@ class APIToken
         'supplies' => 10,
         'returns' => 11,
         'documents' => 12,
+        'finance' => 13,
     ];
     private string $token;
     private ?object $payload;
