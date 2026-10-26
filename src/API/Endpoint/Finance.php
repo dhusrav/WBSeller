@@ -42,7 +42,7 @@ class Finance extends AbstractEndpoint
      * @param int      $offset   Сколько элементов пропустить
      * @param string   $period   Периодичность: weekly — еженедельные, daily — ежедневные
      *
-     * @return array [ {object}, ... ]
+     * @return array|object [ {object}, ... ] или объект ошибки API ({title, detail, ...})
      *
      * @throws InvalidArgumentException
      */
@@ -52,7 +52,7 @@ class Finance extends AbstractEndpoint
         int $limit = 1000,
         int $offset = 0,
         string $period = 'weekly'
-    ): array {
+    ): array|object {
         $maxLimit = 1_000;
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых отчётов: {$maxLimit}");
@@ -85,11 +85,11 @@ class Finance extends AbstractEndpoint
      * @param int        $rrdId    ID строки ответа для постраничной загрузки
      * @param array      $fields   Список полей ответа. Если не указан — все поля
      *
-     * @return array [ {object}, ... ]
+     * @return array|object [ {object}, ... ] или объект ошибки API ({title, detail, ...})
      *
      * @throws InvalidArgumentException
      */
-    public function salesReportsDetailedById($reportId, int $limit = 100_000, int $rrdId = 0, array $fields = []): array
+    public function salesReportsDetailedById($reportId, int $limit = 100_000, int $rrdId = 0, array $fields = []): array|object
     {
         $maxLimit = 100_000;
         if ($limit > $maxLimit) {
@@ -124,7 +124,7 @@ class Finance extends AbstractEndpoint
      * @param string   $period   Периодичность: weekly — еженедельные, daily — ежедневные
      * @param array    $fields   Список полей ответа. Если не указан — все поля
      *
-     * @return array [ {object}, ... ]
+     * @return array|object [ {object}, ... ] или объект ошибки API ({title, detail, ...})
      *
      * @throws InvalidArgumentException
      */
@@ -135,7 +135,7 @@ class Finance extends AbstractEndpoint
         int $rrdId = 0,
         string $period = 'weekly',
         array $fields = []
-    ): array {
+    ): array|object {
         $maxLimit = 100_000;
         if ($limit > $maxLimit) {
             throw new InvalidArgumentException("Превышение максимального количества запрашиваемых строк отчёта: {$maxLimit}");
